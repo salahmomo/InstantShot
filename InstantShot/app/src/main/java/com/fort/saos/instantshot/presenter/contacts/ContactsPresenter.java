@@ -1,6 +1,7 @@
 package com.fort.saos.instantshot.presenter.contacts;
 
 import android.content.Context;
+import android.content.Intent;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -10,6 +11,7 @@ import com.fort.saos.instantshot.model.User;
 import com.fort.saos.instantshot.model.dummy.DummyContent;
 import com.fort.saos.instantshot.usecase.ContactUseCase;
 import com.fort.saos.instantshot.view.ContactsFragment;
+import com.fort.saos.instantshot.view.DiscussionActivity;
 
 import java.util.List;
 
@@ -63,8 +65,21 @@ public class ContactsPresenter {
             } else {
                 contactRecyclerView.setLayoutManager(new GridLayoutManager(context, mColumnCount));
             }
-            contactRecyclerView.setAdapter(new MyContactsRecyclerViewAdapter(getAllcontacts(), mListener));
+            MyContactsRecyclerViewAdapter myContactsRecyclerViewAdapter = new MyContactsRecyclerViewAdapter(getAllcontacts(), mListener);
+
+            myContactsRecyclerViewAdapter.setOnItemClickListener(new MyContactsRecyclerViewAdapter.OnItemClickListener() {
+                @Override
+                public void onItemClick(View view, int position) {
+                    goToDiscussionActivity();
+                }
+            });
+            contactRecyclerView.setAdapter(myContactsRecyclerViewAdapter);
         }
+    }
+
+    public void goToDiscussionActivity() {
+        Intent intent = new Intent(contactsFragment.getContext(), DiscussionActivity.class);
+        contactsFragment.startActivity(intent);
     }
 
     public interface OnListFragmentInteractionListener {
